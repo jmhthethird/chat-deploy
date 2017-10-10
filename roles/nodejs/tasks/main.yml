@@ -1,0 +1,25 @@
+---
+# https://askubuntu.com/questions/786272/why-does-installing-node-6-x-on-ubuntu-16-04-actually-install-node-4-2-6
+- name: "Create Node apt sources list"
+  template: src=nodesource.j2 dest=/etc/apt/sources.list.d/nodesource.list
+
+- name: "Curl NodeSource GPG key and add to apt"
+  shell: curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+
+- name: "Import the NodeSource GPG key into apt"
+  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+
+- name: "Update apt cache"
+  apt:
+    update_cache: yes
+
+- name: "Install package"
+  apt: pkg=nodejs state=installed update_cache=yes
+
+- name: "NPM install packages"
+  npm:
+    name: "{{ item }}"
+    global: yes
+  with_items:
+    - "node-sass"
+    - "yarn"

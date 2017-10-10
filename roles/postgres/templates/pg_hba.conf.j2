@@ -1,0 +1,13 @@
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+local   all             postgres                                peer
+local   replication     postgres                                peer
+local   all             all                                     peer
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 md5
+{% for acl in postgres.client_acls %}
+{% if postgres.ssl.enabled %}
+hostssl  {{ acl.database }} {{ acl.user }} {{ acl.address }}  md5
+{% else %}
+host {{ acl.database }} {{ acl.user }} {{ acl.address }}  password
+{% endif %}
+{% endfor %}

@@ -1,0 +1,35 @@
+listen_addresses = '*'
+port = 5432
+
+data_directory = '/var/lib/postgresql/{{ postgres.version }}/main'
+hba_file = '/etc/postgresql/{{ postgres.version }}/main/pg_hba.conf'
+ident_file = '/etc/postgresql/{{ postgres.version }}/main/pg_ident.conf'
+stats_temp_directory = '/var/run/postgresql/{{ postgres.version }}-main.pg_stat_tmp'
+
+unix_socket_directories = '/var/run/postgresql'
+external_pid_file = '/var/run/postgresql/{{ postgres.version }}-main.pid'
+
+{% if postgres.ssl.enabled %}
+ssl = true
+ssl_cert_file = '{{ postgres.ssl.cert_file }}'
+ssl_key_file = '{{ postgres.ssl.key_file }}'
+{% endif %}
+
+max_connections = 100
+shared_buffers = 128MB
+dynamic_shared_memory_type = posix
+
+log_line_prefix = '%t [%p-%l] %q%u@%d '
+log_timezone = 'UTC'
+
+cluster_name = '{{ postgres.version }}/main'
+datestyle = 'iso, mdy'
+timezone = 'UTC'
+lc_messages = 'en_US.UTF-8'
+lc_monetary = 'en_US.UTF-8'
+lc_numeric = 'en_US.UTF-8'
+lc_time = 'en_US.UTF-8'
+default_text_search_config = 'pg_catalog.english'
+
+max_wal_senders = 2
+wal_level = archive

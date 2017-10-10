@@ -1,0 +1,18 @@
+---
+- name: "wget chat-server repo"
+  git:
+    repo: "https://github.com/oberon-chat/chat-server.git"
+    version: master
+    dest: /home/"{{ ansible_user }}"/chat-server
+    accept_hostkey: yes
+    force: yes
+  become: yes
+  become_user: "{{ ansible_user }}"
+
+- name: "Create default .envrc file"
+  shell: mv /home/"{{ ansible_user }}"/chat-server/.envrc.example /home/"{{ ansible_user }}"/chat-server/.envrc
+
+- name: "Start chat-server"
+  shell: cd /home/"{{ ansible_user }}"/chat-server/ && bin/start
+  become: yes
+  become_user: "{{ ansible_user }}"

@@ -1,0 +1,5 @@
+---
+elixir:
+  version: "1.5.2-1"
+  packages:
+   - "elixir"

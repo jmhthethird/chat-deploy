@@ -1,0 +1,20 @@
+---
+postgres_version: 9.6
+
+postgres:
+  client_acls:
+    - database: "all"
+      user: "all"
+      address: "0.0.0.0/0"
+  ssl:
+    enabled: false
+    key: # placeholer for private key
+    cert: # placeholder for certificate
+    key_file: # path to private key file
+    cert_file: # path to certificate
+  version: "{{ postgres_version }}"
+  packages:
+    - "postgresql-{{ postgres_version }}"
+    - libpq-dev
+  pip_packages:
+    - psycopg2

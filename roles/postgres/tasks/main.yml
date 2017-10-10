@@ -1,0 +1,78 @@
+---
+- name: "Add postgres repository"
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+
+- name: "Add postgres repository key"
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+
+- name: "Install packages"
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items: "{{ postgres.packages }}"
+  become: yes
+
+- name: "Install pip packages"
+  pip:
+      name: "{{ item }}"
+  with_items: "{{ postgres.pip_packages }}"
+
+- name: "Install SSL key/cert"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: root
+    group: ssl-cert
+  with_items:
+    - { src: ssl.key.j2, dest: "{{ postgres.ssl.key_file }}", mode: "0640" }
+    - { src: ssl.cert.j2, dest: "{{ postgres.ssl.cert_file }}", mode: "0644" }
+  when: not (
+          (postgres.ssl.key is none)
+          and
+          (postgres.ssl.cert is none)
+          and
+          (postgres.ssl.key_file is none)
+          and
+          (postgres.ssl.cert_file is none)
+        )
+
+- name: "Configure postgresql.conf"
+  template:
+    src: "postgresql.conf.j2"
+    dest: "/etc/postgresql/{{ postgres.version }}/main/postgresql.conf"
+    owner: "postgres"
+    group: "postgres"
+    mode: 0644
+    backup: yes
+  notify: restart postgresql
+
+- name: "Configure postgres client ACLs"
+  template:
+    src: "pg_hba.conf.j2"
+    dest: "/etc/postgresql/{{ postgres.version }}/main/pg_hba.conf"
+    owner: "postgres"
+    group: "postgres"
+    mode: 0640
+    backup: yes
+  notify: restart postgresql
+
+- name: "Create default postgres database"
+  postgresql_db:
+    name: postgres
+  become: yes
+  become_user: postgres
+
+- name: "Create default postgres user for db"
+  postgresql_user:
+    db: postgres
+    name: postgres
+    password: postgres
+  become: yes
+  become_user: postgres
+
+- name: "Start service and mark to be started on system reboots"
+  service: name=postgresql state=started enabled=yes

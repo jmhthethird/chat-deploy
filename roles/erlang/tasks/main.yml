@@ -1,0 +1,13 @@
+---
+- name: "Download erlang sources package"
+  get_url: url="{{ erlang.deb_src }}" dest="{{ erlang.deb_dest }}"
+
+- name: "Apt fix broken (Ansible should really allow this in their module)"
+  shell: apt-get install -fy
+
+- name: "Install erlang sources from deb file"
+  apt: deb="{{ erlang.deb_dest }}" state=present
+
+- name: "Install erlang packages"
+  apt: name="{{ item }}={{ erlang.version }}" state=present update_cache=yes
+  with_items: "{{ erlang.packages }}"

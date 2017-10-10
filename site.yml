@@ -1,0 +1,26 @@
+---
+- name: "Build chat-server deps"
+  hosts: chat-server
+  roles:
+    - role: elixir
+      tags: elixir
+    - role: postgres
+      tags: postgres
+
+- name: "Setup chat-client"
+  hosts: chat-client
+  roles:
+    - role: nodejs
+      tags: nodejs
+
+# - name: "Run chat-server"
+#   hosts: chat-server
+#   roles:
+#     - role: chat-server
+#       tags: chat-server
+
+# - name: "Run chat-client"
+#   hosts: chat-client
+#   roles:
+#     - role: chat-client
+#       tags: chat-client
