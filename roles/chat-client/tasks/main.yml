@@ -15,5 +15,5 @@
 - name: "Install local yarn packages"
   shell: cd /home/"{{ ansible_user }}"/chat-client/ && yarn install
 
-- name: "Start chat-client"
-  shell: cd /home/"{{ ansible_user }}"/chat-client/ && yarn start
+# - name: "Start chat-client"
+#   shell: cd /home/"{{ ansible_user }}"/chat-client/ && yarn start

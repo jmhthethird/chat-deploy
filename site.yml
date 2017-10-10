@@ -13,14 +13,14 @@
     - role: nodejs
       tags: nodejs
 
-# - name: "Run chat-server"
-#   hosts: chat-server
-#   roles:
-#     - role: chat-server
-#       tags: chat-server
+ - name: "Run chat-server"
+   hosts: chat-server
+   roles:
+     - role: chat-server
+       tags: chat-server
 
-# - name: "Run chat-client"
-#   hosts: chat-client
-#   roles:
-#     - role: chat-client
-#       tags: chat-client
+ - name: "Run chat-client"
+   hosts: chat-client
+   roles:
+     - role: chat-client
+       tags: chat-client
