@@ -1,0 +1,12 @@
+---
+apps:
+  chat-server:
+    dir: "/home/{{ ansible_user }}/chat-server"
+    repo: "https://github.com/oberon-chat/chat-server.git"
+    version: "master"
+  chat-client:
+    dir: "/home/{{ ansible_user }}/chat-client"
+    repo: "https://github.com/oberon-chat/chat-client.git"
+    version: "master"
+
+postgres_version: 9.6
