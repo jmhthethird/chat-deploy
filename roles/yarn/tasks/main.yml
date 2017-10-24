@@ -1,0 +1,4 @@
+---
+- name: "Install local yarn packages"
+  shell: cd /home/"{{ ansible_user }}"/"{{ item }}"/ && yarn install
+  with_items: "{{ apps }}"
